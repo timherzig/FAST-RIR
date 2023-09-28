@@ -10,18 +10,18 @@ __C = edict()
 cfg = __C
 
 # Dataset name: flowers, birds
-__C.DATASET_NAME = 'birds'
-__C.EMBEDDING_TYPE = 'cnn-rnn'
-__C.CONFIG_NAME = ''
-__C.GPU_ID = '0'
+__C.DATASET_NAME = "birds"
+__C.EMBEDDING_TYPE = "cnn-rnn"
+__C.CONFIG_NAME = ""
+__C.GPU_ID = "0"
 __C.CUDA = True
 __C.WORKERS = 6
 
-__C.NET_G = ''
-__C.NET_D = ''
-__C.STAGE1_G = ''
-__C.DATA_DIR = ''
-__C.EVAL_DIR = ''
+__C.NET_G = ""
+__C.NET_D = ""
+__C.STAGE1_G = ""
+__C.DATA_DIR = ""
+__C.EVAL_DIR = ""
 __C.VIS_COUNT = 64
 
 __C.Z_DIM = 100
@@ -35,7 +35,7 @@ __C.TRAIN.FLAG = True
 __C.TRAIN.BATCH_SIZE = 64
 __C.TRAIN.MAX_EPOCH = 600
 __C.TRAIN.SNAPSHOT_INTERVAL = 50
-__C.TRAIN.PRETRAINED_MODEL = ''
+__C.TRAIN.PRETRAINED_MODEL = ""
 __C.TRAIN.PRETRAINED_EPOCH = 600
 __C.TRAIN.LR_DECAY_EPOCH = 600
 __C.TRAIN.DISCRIMINATOR_LR = 2e-4
@@ -65,7 +65,7 @@ def _merge_a_into_b(a, b):
     for k, v in a.items():
         # a must specify keys that are in b
         if k not in b:
-            raise KeyError('{} is not a valid config key'.format(k))
+            raise KeyError("{} is not a valid config key".format(k))
 
         # the types must match, too
         old_type = type(b[k])
@@ -73,16 +73,18 @@ def _merge_a_into_b(a, b):
             if isinstance(b[k], np.ndarray):
                 v = np.array(v, dtype=b[k].dtype)
             else:
-                raise ValueError(('Type mismatch ({} vs. {}) '
-                                  'for config key: {}').format(type(b[k]),
-                                                               type(v), k))
+                raise ValueError(
+                    ("Type mismatch ({} vs. {}) " "for config key: {}").format(
+                        type(b[k]), type(v), k
+                    )
+                )
 
         # recursively merge dicts
         if type(v) is edict:
             try:
                 _merge_a_into_b(a[k], b[k])
             except:
-                print('Error under config key: {}'.format(k))
+                print("Error under config key: {}".format(k))
                 raise
         else:
             b[k] = v
@@ -91,7 +93,8 @@ def _merge_a_into_b(a, b):
 def cfg_from_file(filename):
     """Load a config file and merge it into the default options."""
     import yaml
-    with open(filename, 'r') as f:
-        yaml_cfg = edict(yaml.load(f))
+
+    with open(filename, "r") as f:
+        yaml_cfg = edict(yaml.load(f, Loader=yaml.FullLoader))
 
     _merge_a_into_b(yaml_cfg, __C)
