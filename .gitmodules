@@ -1,0 +1,3 @@
+[submodule "MULTI-AUDIODEC"]
+	path = MULTI-AUDIODEC
+	url = git@github.com:timherzig/MULTI-AUDIODEC.git
